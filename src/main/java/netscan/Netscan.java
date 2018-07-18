@@ -48,7 +48,6 @@ public class Netscan {
         try {
             while (true) {
                 String nodeId = getFirstNodeId();
-                System.out.println(nodeId);
 
                 resetExpanded();
                 List neighbors = regionQuery(nodeId);
