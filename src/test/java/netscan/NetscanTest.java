@@ -40,7 +40,7 @@ public class NetscanTest
                 session.run(line);
             }
 
-            String netscanQuery = "CALL netscan.find_communities('Person','LIKES', 'id','weight', 'INCOMING', 0.5, 5, 1);";
+            String netscanQuery = "CALL netscan.find_communities('Person','LIKES', 'id','weight', 'INCOMING', true, 0.5, 5, 1);";
             session.run(netscanQuery);
 
             String assertQuery = "MATCH (n:Cluster) RETURN n LIMIT 25";
