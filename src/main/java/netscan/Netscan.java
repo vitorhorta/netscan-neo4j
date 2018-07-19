@@ -19,6 +19,8 @@ public class Netscan {
 
     public static String relDirection = "INCOMING";
 
+    public static Boolean higherBetter = true;
+
     public static int clusterId = 1;
 
     public static long minPts = 5;
@@ -33,7 +35,7 @@ public class Netscan {
 
     @Procedure(value = "netscan.find_communities", mode = Mode.WRITE)
     @Description("Netscanner")
-    public void execute(@Name("nodeLabel") String nodeLabel, @Name("relType") String relType, @Name("idAttr") String idAttr, @Name("weight") String weight, @Name("relDirection") String relDirection, @Name("eps") double eps, @Name("minPts") long minPts, @Name("radius") long radius) {
+    public void execute(@Name("nodeLabel") String nodeLabel, @Name("relType") String relType, @Name("idAttr") String idAttr, @Name("weight") String weight, @Name("relDirection") String relDirection, @Name("higherBetter") Boolean higherBetter, @Name("eps") double eps, @Name("minPts") long minPts, @Name("radius") long radius) {
         this.nodeLabel = nodeLabel;
         this.relType = relType;
         this.idAttr = idAttr;
@@ -42,6 +44,7 @@ public class Netscan {
         this.minPts = minPts;
         this.radius = radius;
         this.eps = eps;
+        this.higherBetter = higherBetter;
 
         if(!this.relDirection.equals("INCOMING") && !this.relDirection.equals("OUTGOING")) throw new ProtocolException("Invalid relationship direction");
 
@@ -157,12 +160,15 @@ public class Netscan {
     }
 
     public String getRegionQuery(String nodeId) {
+        String weightComparisson = ">=";
+
+        if(!this.higherBetter) weightComparisson = "<=";
 
         if(relDirection.equals("INCOMING")) {
-            return "MATCH path = (neighbor:" + nodeLabel + ")-[rels:" + relType + "*1.." + radius + "]->(originNode:" + nodeLabel + " {" + idAttr + ":" + nodeId + "}) WITH originNode,neighbor,rels WHERE ALL (r IN rels WHERE toFloat(r." + weight + ") >= toFloat(" + eps + ")) SET originNode.expanded = 1 RETURN neighbor."+idAttr+" AS "+idAttr+", neighbor.expanded AS expanded, neighbor.noise AS noise LIMIT 10000";
+            return "MATCH path = (neighbor:" + nodeLabel + ")-[rels:" + relType + "*1.." + radius + "]->(originNode:" + nodeLabel + " {" + idAttr + ":" + nodeId + "}) WITH originNode,neighbor,rels WHERE ALL (r IN rels WHERE toFloat(r." + weight + ") " + weightComparisson + " toFloat(" + eps + ")) SET originNode.expanded = 1 RETURN neighbor."+idAttr+" AS "+idAttr+", neighbor.expanded AS expanded, neighbor.noise AS noise LIMIT 10000";
         }
 
-        return "MATCH path = (neighbor:" + nodeLabel + ")<-[rels:" + relType + "*1.." + radius + "]-(originNode:" + nodeLabel + " {" + idAttr + ":" + nodeId + "}) WITH originNode,neighbor,rels WHERE ALL (r IN rels WHERE toFloat(r." + weight + ") >= toFloat(" + eps + ")) SET originNode.expanded = 1 RETURN neighbor."+idAttr+" AS "+idAttr+", neighbor.expanded AS expanded, neighbor.noise AS noise LIMIT 10000";
+        return "MATCH path = (neighbor:" + nodeLabel + ")<-[rels:" + relType + "*1.." + radius + "]-(originNode:" + nodeLabel + " {" + idAttr + ":" + nodeId + "}) WITH originNode,neighbor,rels WHERE ALL (r IN rels WHERE toFloat(r." + weight + ") " + weightComparisson + " toFloat(" + eps + ")) SET originNode.expanded = 1 RETURN neighbor."+idAttr+" AS "+idAttr+", neighbor.expanded AS expanded, neighbor.noise AS noise LIMIT 10000";
 
     }
 
