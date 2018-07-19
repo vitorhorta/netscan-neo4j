@@ -48,7 +48,7 @@ To achieve the most correct results run the NetSCAN with the following parameter
 
 The following result should be achieved:
 
-<a href="url"><img src="https://github.com/vitorhorta/netscan-neo4j/blob/master/FIG15.png" align="center" height="250" width="250" ></a>
+<a href="url"><img src="https://github.com/vitorhorta/netscan-neo4j/blob/master/FIG15.png" align="center" height="300" width="300" ></a>
 
 
 ## Restore database to previous state
