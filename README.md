@@ -40,7 +40,7 @@ The basic cypher query to run the NetSCAN procedure is the following:
 
 The file `netscan-neo4j/src/test/java/netscan/fixtures.db` contains a neo4j dump with a protein network to be used for testing and demonstration.
 
-To run the example import or execute the queries inside this file.
+To run the example import or execute the queries contained this file.
 
 To achieve the most correct results run the NetSCAN with the following parameters:
 
