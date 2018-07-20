@@ -10,7 +10,7 @@ This project uses maven, to build a jar-file with the procedure in this project,
 
     mvn clean package
 
-This will produce a jar-file,`target/procedure-template-1.0.0-SNAPSHOT.jar`,
+This will produce a jar-file,`target/netscan-1.0.0.jar`,
 that can be deployed in the `plugin` directory of your Neo4j instance.
 
 ## Installing
